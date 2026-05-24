@@ -58,9 +58,9 @@ def getUnitsFromFileName(fileName):
     (r"dr\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": ""}),
     (r"Ex\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$ \vec{E}_x (V/m) $"}),
     (r"Ey\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$\vec{E}_y (V/m)$"}),
-    (r"j[1-5]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$\Gamma_i$"}),  # Gamma/Gamma_max
-    (r"n[1-5]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$n_i$"}),  # Particle Density n/n_max
-    (r"phi\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$\phi$"}),  # Electric Potential phi/phi_max
+    (r"j[1-5]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$\Gamma_i$"}),  
+    (r"n[1-5]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$n_i$"}),  
+    (r"phi\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"$\phi$"}),  
     (r"sour[2-4]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": r"($m^{-3}s^{-1}$)"}),
     (r"T[1-5]\.mco", {"xlabel": "X", "ylabel": "Z", "cbar_label": "T(eV)"})
 ]
@@ -97,7 +97,7 @@ def plot_mco(data, title="Averaged Plasma Plots", xlabel="X-axis", ylabel="Y-axi
 
 
 # Setting input directory
-input_dir = "D:\cmackenzie\ITER LePIC Data\sim11\Macho\DATA_mco"
+input_dir = "D:\cmackenzie\ITER LePIC Data\sim17\Macho\DATA_mco"
 mco_files = [f for f in os.listdir(input_dir) if f.endswith('.mco')]
 
 # Initialize global variables for interactive navigation
