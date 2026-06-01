@@ -97,7 +97,7 @@ def plot_mco(data, title="Averaged Plasma Plots", xlabel="X-axis", ylabel="Y-axi
 
 
 # Setting input directory
-input_dir = "D:\cmackenzie\ITER LePIC Data\sim17\Macho\DATA_mco"
+input_dir = "D:\cmackenzie\ITER LePIC Data\sim19\Macho\DATA_mco"
 mco_files = [f for f in os.listdir(input_dir) if f.endswith('.mco')]
 
 # Initialize global variables for interactive navigation

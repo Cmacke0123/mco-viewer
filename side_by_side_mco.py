@@ -64,10 +64,10 @@ def getUnitsFromFileName(fileName):
 #
 # Paths to simulations you would like to compare
 #
-input_dir_1 = r"D:\cmackenzie\ITER LePIC Data\sim16\Macho\DATA_mco"
-input_dir_2 = r"D:\cmackenzie\ITER LePIC Data\sim17\Macho\DATA_mco"
-label_1 = "Sim 16 (Updated hydrogen cross sections)"
-label_2 = "Sim 17 (Legacy hydrogen cross sections)"
+input_dir_1 = r"D:\cmackenzie\ITER LePIC Data\sim7\Macho\DATA_mco"
+input_dir_2 = r"D:\cmackenzie\ITER LePIC Data\sim8\Macho\DATA_mco"
+label_1 = "Sim 7 (Original Hydrogen Run (hydrogen2.dat))"
+label_2 = "Sim 19 (2026/05 Hydrogen RUn (hydrogen2.dat))"
 
 
 # Build the union of .mco filenames present in both directories
