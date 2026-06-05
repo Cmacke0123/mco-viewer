@@ -1,4 +1,3 @@
-
 ####################################
 #          Connor MacKenzie        #
 ####################################
@@ -9,8 +8,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.widgets import Button
+from matplotlib.colors import SymLogNorm, LogNorm
 
 
+#
+# *.mco loader
+#
 def load_mco(filename):
     try:
         with open(filename, 'r') as file:
@@ -42,6 +45,9 @@ def load_mco(filename):
         return None, None
 
 
+#
+# Unit parser
+#
 def getUnitsFromFileName(fileName):
     file_units_patterns = [
         (r"bcnd\.mco",    {"xlabel": "X", "ylabel": "Z", "cbar_label": ""}),
@@ -95,13 +101,19 @@ print(f"Found {len(common_files)} files in both directories, "
 current_index = 0
 cax1 = None
 cax2 = None
+cax3 = None
+cax4 = None
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 6))
-fig.subplots_adjust(bottom=0.10, top=0.90, left=0.05, right=0.95, wspace=0.35)
+fig, ((ax1_lin, ax1_log), (ax2_lin, ax2_log)) = plt.subplots(2, 2, figsize=(14, 10))
+fig.subplots_adjust(bottom=0.10, top=0.90, left=0.05, right=0.95, hspace=0.35, wspace=0.35)
 
 
-def draw_panel(ax, file_name, dir_path, dir_label, existing_cax):
-    """Render one panel. Returns the new cax so the caller can track it."""
+def draw_panel(ax, file_name, dir_path, dir_label, normalize_type, existing_cax, vmin=None, vmax=None):
+    """
+    Render one panel with specified normalization.
+    normalize_type: 'linear' or 'log'
+    Returns the new cax so the caller can track it.
+    """
     ax.clear()
     if existing_cax is not None:
         try:
@@ -123,10 +135,33 @@ def draw_panel(ax, file_name, dir_path, dir_label, existing_cax):
 
     units = getUnitsFromFileName(file_name)
 
-    im = ax.imshow(data, cmap='gist_heat', origin='lower', aspect='auto')
-    ax.set_title(f"{dir_label}\n{file_name}", fontsize=13)
-    ax.set_xlabel(units["xlabel"], fontsize=12)
-    ax.set_ylabel(units["ylabel"], fontsize=12)
+    # Set up normalization
+    if vmin is None or vmax is None:
+        vmin = np.min(data)
+        vmax = np.max(data)
+
+    if normalize_type == 'log':
+        # For log scale, check if data is positive
+        if vmin > 0:
+            # All positive: use standard LogNorm
+            norm = LogNorm(vmin=vmin, vmax=vmax)
+        else:
+            # Has zero or negative values: use SymLogNorm
+            # linthresh must be positive
+            linthresh = max(abs(vmin), abs(vmax)) * 0.01
+            if linthresh <= 0:
+                linthresh = 1.0
+            norm = SymLogNorm(linthresh=linthresh, vmin=vmin, vmax=vmax)
+        norm_label = "Log Scale"
+    else:
+        # Linear normalization
+        norm = plt.Normalize(vmin=vmin, vmax=vmax)
+        norm_label = "Linear Scale"
+
+    im = ax.imshow(data, cmap='gist_heat', origin='lower', aspect='auto', norm=norm)
+    ax.set_title(f"{dir_label} — {norm_label}\n{file_name}", fontsize=12)
+    ax.set_xlabel(units["xlabel"], fontsize=11)
+    ax.set_ylabel(units["ylabel"], fontsize=11)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.tick_params(left=False, bottom=False)
@@ -134,25 +169,75 @@ def draw_panel(ax, file_name, dir_path, dir_label, existing_cax):
     divider = make_axes_locatable(ax)
     new_cax = divider.append_axes("right", size="5%", pad=0.10)
     cbar = plt.colorbar(im, cax=new_cax)
-    cbar.set_label(units["cbar_label"], fontsize=11)
+    cbar.set_label(units["cbar_label"], fontsize=10)
 
     return new_cax
 
 
+
 def update_plot(index):
-    global cax1, cax2
+    global cax1, cax2, cax3, cax4
     file_name = mco_files[index]
 
-    # Left panel – dir 1
+    # Get directories for both simulations
     d1 = dir_path_for(file_name, prefer=1)
     d2 = dir_path_for(file_name, prefer=2)
 
-    cax1 = draw_panel(ax1, file_name, d1, label_1, cax1)
-    cax2 = draw_panel(ax2, file_name, d2, label_2, cax2)
+    # Load data for both simulations
+    data1, _ = load_mco(os.path.join(d1, file_name))
+    data2, _ = load_mco(os.path.join(d2, file_name))
+
+    # Calculate combined vmin/vmax from both simulations
+    if data1 is not None and data2 is not None:
+        vmin = min(np.min(data1), np.min(data2))
+        vmax = max(np.max(data1), np.max(data2))
+    else:
+        vmin, vmax = 0, 1
+
+    # Both linear plots use the same scale
+    cax1 = draw_panel(ax1_lin, file_name, d1, label_1 + " (Linear)", 
+                      'linear', cax1, vmin=vmin, vmax=vmax)
+    cax3 = draw_panel(ax2_lin, file_name, d2, label_2 + " (Linear)", 
+                      'linear', cax3, vmin=vmin, vmax=vmax)
+
+    # Both log plots use the same scale
+    cax2 = draw_panel(ax1_log, file_name, d1, label_1 + " (Log)", 
+                      'log', cax2, vmin=vmin, vmax=vmax)
+    cax4 = draw_panel(ax2_log, file_name, d2, label_2 + " (Log)", 
+                      'log', cax4, vmin=vmin, vmax=vmax)
 
     total = len(mco_files)
     fig.suptitle(f"File {index + 1} / {total}  —  {file_name}", fontsize=14, y=0.97)
     fig.canvas.draw_idle()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #
 # Navigation
