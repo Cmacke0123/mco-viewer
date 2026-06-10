@@ -1,7 +1,7 @@
-####################################
-#          Connor MacKenzie        #
-####################################
 
+#
+# Import python libraries
+#
 import os
 import re
 import numpy as np
@@ -26,7 +26,7 @@ def load_mco(filename):
                 line = file.readline().strip().split()
 
                 if len(line) > nx:
-                    print(f"Warning: Line {line_num + 1} has extra points, trimming to {nx}")
+                    #print(f"Warning: Line {line_num + 1} has extra points, trimming to {nx}")
                     line = line[:nx]
                 elif len(line) < nx:
                     raise ValueError(f"Line length {len(line)} does not match nx={nx} on line {line_num + 1}")
@@ -94,6 +94,36 @@ if not mco_files:
 print(f"Found {len(common_files)} files in both directories, "
       f"{len(only_in_1)} only in dir1, {len(only_in_2)} only in dir2.")
 
+#
+# Calculate max values for all files
+#
+print("\n" + "="*80)
+print("MAX VALUES FOR ALL FILES")
+print("="*80)
+
+max_values_dir1 = {}
+max_values_dir2 = {}
+
+for file_name in mco_files:
+    print(f"\n{file_name}:")
+    
+    # Check dir1
+    if file_name in files_1:
+        file_path_1 = os.path.join(input_dir_1, file_name)
+        data1, max1 = load_mco(file_path_1)
+        if data1 is not None:
+            max_values_dir1[file_name] = max1
+            print(f"  {label_1}: {max1:.6e}")
+    
+    # Check dir2
+    if file_name in files_2:
+        file_path_2 = os.path.join(input_dir_2, file_name)
+        data2, max2 = load_mco(file_path_2)
+        if data2 is not None:
+            max_values_dir2[file_name] = max2
+            print(f"  {label_2}: {max2:.6e}")
+
+print("\n" + "="*80)
 
 #
 # figure() env. set up
@@ -211,34 +241,6 @@ def update_plot(index):
     fig.canvas.draw_idle()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #
 # Navigation
 #
@@ -279,4 +281,4 @@ btn_next = Button(ax_next, 'Next  ▶')
 btn_prev.on_clicked(prev_file)
 btn_next.on_clicked(next_file)
 
-plt.show()
+#plt.show()
