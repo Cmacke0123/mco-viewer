@@ -70,8 +70,8 @@ def getUnitsFromFileName(fileName):
 #
 # Paths to simulations you would like to compare
 #
-input_dir_1 = r"D:\cmackenzie\ITER LePIC Data\sim19\Macho\DATA_mco"
-input_dir_2 = r"D:\cmackenzie\ITER LePIC Data\sim20\sim20\Macho\DATA_mco"
+input_dir_1 = r"D:\cmackenzie\ITERLePIC_DATA\sim19\Macho\DATA_mco"
+input_dir_2 = r"D:\cmackenzie\ITERLePIC_DATA\sim20\sim20\Macho\DATA_mco"
 label_1 = "Sim 19 (2026/05 Hydrogen Run (hydrogen2.dat))"
 label_2 = "Sim 20 (2026/06 Hydrogen Run (Shydrogen.dat))"
 
@@ -281,4 +281,4 @@ btn_next = Button(ax_next, 'Next  ▶')
 btn_prev.on_clicked(prev_file)
 btn_next.on_clicked(next_file)
 
-#plt.show()
+plt.show()
