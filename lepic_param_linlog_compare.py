@@ -72,8 +72,8 @@ def getUnitsFromFileName(fileName):
 #
 input_dir_1 = r"D:\cmackenzie\ITERLePIC_DATA\sim19\Macho\DATA_mco"
 input_dir_2 = r"D:\cmackenzie\ITERLePIC_DATA\sim20\sim20\Macho\DATA_mco"
-label_1 = "Sim 19 (2026/05 Hydrogen Run (hydrogen2.dat))"
-label_2 = "Sim 20 (2026/06 Hydrogen Run (Shydrogen.dat))"
+label_1 = "Sim 19 (2026/05 Hydrogen Run (Janev))"
+label_2 = "Sim 20 (2026/06 Hydrogen Run (Laporta))"
 
 
 # Build the union of .mco filenames present in both directories
