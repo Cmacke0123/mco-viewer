@@ -10,20 +10,21 @@ import matplotlib.animation as animation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-# ── Configuration ─────────────────────────────────────────────────────────────
+#
+# Path(s) config
+#
 
 seq_dir    = r"E:\cmackenzie\ITERLePIC_DATA\sim21\Macho\DATA_seq"
 output_dir = "./Animations"
-
-# 'gif'  → Pillow writer, no extra install needed  (recommended if no ffmpeg)
-# 'mp4'  → FFMpegWriter, needs ffmpeg on PATH
 SAVE_FORMAT = 'gif'
 
 FPS        = 5      # frames per second
 FIXED_CLIM = True   # True = colour scale locked across all timesteps for a variable
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+#
+# *.mco file loader
+#
 
 def load_mco(filename):
     try:
@@ -67,10 +68,9 @@ def natural_sort_key(s):
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', s)]
 
 
-# ── Group files by variable prefix ───────────────────────────────────────────
-# Expects names like  phi_003.mco  or  n1_012.mco
-# The prefix is everything before the last underscore+digits.
-
+#
+# Group variable files for animation
+#
 os.makedirs(output_dir, exist_ok=True)
 
 all_files = sorted(
@@ -94,7 +94,9 @@ for fname in all_files:
 print(f"Variables found ({len(groups)}): {sorted(groups.keys())}\n")
 
 
-# ── Animate each variable ─────────────────────────────────────────────────────
+#
+# Main for loop to make animation
+#
 
 for var, fnames in sorted(groups.items()):
     fnames = sorted(fnames, key=natural_sort_key)
