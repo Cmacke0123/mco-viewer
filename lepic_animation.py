@@ -14,11 +14,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 # Path(s) config
 #
 
-seq_dir    = r"E:\cmackenzie\ITERLePIC_DATA\sim21\Macho\DATA_seq"
-output_dir = "./Animations"
+seq_dir    = r"E:\cmackenzie\ITERLePIC_DATA\sim23\Macho\DATA_seq"
+output_dir = ".\Animations"
 SAVE_FORMAT = 'gif'
 
-FPS        = 5      # frames per second
+FPS = 5      # frames per second
 FIXED_CLIM = True   # True = colour scale locked across all timesteps for a variable
 
 
